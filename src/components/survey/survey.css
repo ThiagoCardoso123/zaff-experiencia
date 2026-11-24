@@ -1,0 +1,666 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   Zaff · experiência do cliente
+   Feito à mão (sem utilitários) para controlar cada detalhe de ritmo e movimento.
+   Cores vêm de --zf-primary / --zf-bg / --zf-accent (configuráveis no painel).
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.zf {
+  --ink: #2b1b17;
+  --ink-soft: color-mix(in srgb, var(--ink) 62%, var(--zf-bg));
+  --line: color-mix(in srgb, var(--zf-primary) 18%, var(--zf-bg));
+  --surface: color-mix(in srgb, #fff 55%, var(--zf-bg));
+  --ease: cubic-bezier(0.22, 0.8, 0.24, 1);
+
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--zf-bg);
+  color: var(--ink);
+  font-family: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.zf *,
+.zf *::before,
+.zf *::after {
+  box-sizing: border-box;
+}
+
+.zf button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.zf :focus-visible {
+  outline: 2px solid var(--zf-primary);
+  outline-offset: 3px;
+}
+.zf h1:focus {
+  outline: none;
+}
+
+/* ── Telas escuras: boas-vindas e agradecimento ─────────────────────────────── */
+
+.zf--dark {
+  background: var(--zf-primary);
+  color: var(--zf-bg);
+  justify-content: center;
+}
+.zf--dark :focus-visible {
+  outline-color: var(--zf-bg);
+}
+
+.zf-hero {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 48px 28px calc(40px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.zf-hero__logo {
+  width: min(58vw, 230px);
+  height: auto;
+  margin-bottom: 44px;
+}
+.zf-hero__seal {
+  width: min(48vw, 190px);
+  height: auto;
+  margin-bottom: 36px;
+  animation: zf-seal 900ms var(--ease) both;
+}
+
+.zf-chip {
+  margin: -20px 0 26px;
+  padding: 5px 14px;
+  border: 1px solid color-mix(in srgb, var(--zf-bg) 45%, transparent);
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.zf-hero__title {
+  margin: 0 0 14px;
+  font-family: var(--font-display), Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  font-size: clamp(32px, 9vw, 40px);
+  line-height: 1.08;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+.zf-hero__body {
+  margin: 0 0 40px;
+  max-width: 30ch;
+  font-size: 16px;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--zf-bg) 86%, var(--zf-primary));
+  text-wrap: pretty;
+}
+
+.zf-hero__hint {
+  margin: 18px 0 0;
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--zf-bg) 68%, var(--zf-primary));
+}
+
+/* Ramos da marca como ornamento */
+.zf-sprig {
+  display: block;
+  background: currentColor;
+  -webkit-mask: url("/brand/zaff-folha.svg") center / contain no-repeat;
+  mask: url("/brand/zaff-folha.svg") center / contain no-repeat;
+}
+.zf-deco {
+  position: absolute;
+  pointer-events: none;
+  color: var(--zf-bg);
+  opacity: 0.07;
+}
+.zf-deco--a {
+  width: 300px;
+  height: 500px;
+  right: -90px;
+  bottom: -120px;
+  transform: rotate(-14deg);
+  animation: zf-sway 9s ease-in-out infinite alternate;
+  transform-origin: 40% 100%;
+}
+.zf-deco--b {
+  width: 170px;
+  height: 285px;
+  left: -60px;
+  top: -70px;
+  transform: rotate(160deg);
+}
+
+/* ── Botões ────────────────────────────────────────────────────────────────── */
+
+.zf .zf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 58px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition:
+    transform 160ms var(--ease),
+    background-color 200ms,
+    opacity 200ms;
+}
+.zf .zf-btn:active {
+  transform: scale(0.975);
+}
+.zf .zf-btn--light {
+  background: var(--zf-bg);
+  color: var(--zf-primary);
+}
+.zf .zf-btn--ghost {
+  border: 1px solid color-mix(in srgb, var(--zf-bg) 55%, transparent);
+  color: var(--zf-bg);
+}
+.zf .zf-btn--solid {
+  background: var(--zf-primary);
+  color: var(--zf-bg);
+}
+.zf .zf-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* ── Cabeçalho do formulário ───────────────────────────────────────────────── */
+
+.zf-top {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: calc(14px + env(safe-area-inset-top)) 16px 12px;
+}
+.zf .zf-back {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--zf-primary);
+  transition: background-color 160ms;
+}
+.zf .zf-back:active {
+  background: var(--line);
+}
+.zf-top__logo {
+  justify-self: center;
+  height: 46px;
+  width: auto;
+}
+.zf-count {
+  justify-self: end;
+  padding-right: 6px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+
+.zf-progress {
+  width: 100%;
+  height: 2px;
+  background: var(--line);
+}
+.zf-progress span {
+  display: block;
+  height: 100%;
+  background: var(--zf-primary);
+  transform-origin: left center;
+  transition: transform 520ms var(--ease);
+}
+
+/* ── Etapa ─────────────────────────────────────────────────────────────────── */
+
+.zf-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 36px 24px calc(24px + env(safe-area-inset-bottom));
+}
+
+.zf-q {
+  margin: 0 0 32px;
+  font-family: var(--font-display), Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  font-size: clamp(28px, 7.6vw, 34px);
+  line-height: 1.12;
+  color: var(--zf-primary);
+  text-wrap: balance;
+}
+
+.zf-stage.is-entering {
+  animation: zf-in 440ms var(--ease) both;
+}
+.zf-stage.is-entering.is-back {
+  animation-name: zf-in-back;
+}
+.zf-stage.is-leaving {
+  animation: zf-out 190ms ease-in both;
+}
+.zf-stage.is-leaving.is-back {
+  animation-name: zf-out-back;
+}
+
+@keyframes zf-in {
+  from { opacity: 0; transform: translate3d(22px, 0, 0); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes zf-in-back {
+  from { opacity: 0; transform: translate3d(-22px, 0, 0); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes zf-out {
+  to { opacity: 0; transform: translate3d(-14px, 0, 0); }
+}
+@keyframes zf-out-back {
+  to { opacity: 0; transform: translate3d(14px, 0, 0); }
+}
+@keyframes zf-seal {
+  from { opacity: 0; transform: rotate(-24deg) scale(0.9); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes zf-sway {
+  from { transform: rotate(-14deg); }
+  to   { transform: rotate(-9deg); }
+}
+@keyframes zf-pop {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.22); }
+  100% { transform: scale(1); }
+}
+
+/* ── Etapa 1: experiência geral ────────────────────────────────────────────── */
+
+.zf-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.zf .zf-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 62px;
+  padding: 0 22px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  text-align: left;
+  transition:
+    background-color 220ms,
+    border-color 220ms,
+    color 220ms,
+    transform 160ms var(--ease);
+}
+.zf .zf-option:active {
+  transform: scale(0.985);
+}
+.zf-option__label {
+  font-size: 17px;
+  font-weight: 500;
+}
+.zf .zf-option.is-on {
+  background: var(--zf-primary);
+  border-color: var(--zf-primary);
+  color: var(--zf-bg);
+}
+
+/* medidor de folhas (1 a 5) */
+.zf-meter {
+  display: inline-flex;
+  gap: 5px;
+}
+.zf-meter i {
+  width: 11px;
+  height: 11px;
+  border-radius: 0 100% 0 100%;
+  border: 1px solid color-mix(in srgb, var(--zf-accent) 55%, var(--zf-bg));
+  transition: background-color 220ms, border-color 220ms;
+}
+.zf-meter i.is-full {
+  background: var(--zf-accent);
+  border-color: var(--zf-accent);
+}
+.zf-option.is-on .zf-meter i {
+  border-color: color-mix(in srgb, var(--zf-bg) 50%, transparent);
+}
+.zf-option.is-on .zf-meter i.is-full {
+  background: var(--zf-bg);
+  border-color: var(--zf-bg);
+}
+
+/* ── Etapas 2–5: estrelas ──────────────────────────────────────────────────── */
+
+.zf-stars-wrap {
+  margin-top: 8px;
+  text-align: center;
+}
+.zf-stars {
+  display: flex;
+  justify-content: space-between;
+  max-width: 340px;
+  margin: 0 auto;
+}
+.zf .zf-star {
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+}
+.zf-star svg {
+  width: 44px;
+  height: 44px;
+  fill: transparent;
+  stroke: color-mix(in srgb, var(--zf-primary) 45%, var(--zf-bg));
+  stroke-width: 1.1;
+  stroke-linejoin: round;
+  transition: fill 200ms, stroke 200ms, transform 200ms var(--ease);
+  transition-delay: inherit;
+}
+.zf-star.is-on svg {
+  fill: var(--zf-primary);
+  stroke: var(--zf-primary);
+}
+.zf-star.is-picked svg {
+  animation: zf-pop 380ms var(--ease);
+}
+.zf-stars__label {
+  min-height: 24px;
+  margin: 18px 0 0;
+  font-size: 15px;
+  letter-spacing: 0.03em;
+  color: var(--ink-soft);
+}
+
+/* ── Etapa 6: NPS ──────────────────────────────────────────────────────────── */
+
+.zf-nps {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 8px;
+}
+.zf .zf-nps__n {
+  grid-column: span 2;
+  aspect-ratio: 1;
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  font-size: 18px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  transition:
+    background-color 200ms,
+    color 200ms,
+    border-color 200ms,
+    transform 160ms var(--ease);
+}
+/* segunda fileira (6–10) centralizada sob a primeira */
+.zf .zf-nps__n:nth-child(7) {
+  grid-column: 2 / span 2;
+}
+.zf .zf-nps__n:active {
+  transform: scale(0.94);
+}
+.zf .zf-nps__n.is-on {
+  background: var(--zf-primary);
+  border-color: var(--zf-primary);
+  color: var(--zf-bg);
+}
+.zf-nps__scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+/* ── Etapa 7: feedback ─────────────────────────────────────────────────────── */
+
+.zf-block {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.zf-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.zf .zf-tag {
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 15px;
+  transition:
+    background-color 200ms,
+    color 200ms,
+    border-color 200ms,
+    transform 160ms var(--ease);
+}
+.zf .zf-tag:active {
+  transform: scale(0.96);
+}
+.zf .zf-tag.is-on {
+  background: var(--zf-primary);
+  border-color: var(--zf-primary);
+  color: var(--zf-bg);
+}
+
+.zf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.zf-field > span {
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+}
+.zf-field em {
+  font-style: normal;
+  opacity: 0.75;
+}
+.zf-field input,
+.zf-field textarea {
+  width: 100%;
+  padding: 15px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px; /* evita zoom automático no iOS */
+  resize: none;
+  transition: border-color 200ms, box-shadow 200ms;
+}
+.zf-field input::placeholder,
+.zf-field textarea::placeholder {
+  color: color-mix(in srgb, var(--ink) 38%, var(--zf-bg));
+}
+.zf-field input:focus,
+.zf-field textarea:focus {
+  outline: none;
+  border-color: var(--zf-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--zf-primary) 14%, transparent);
+}
+
+/* ── Etapa 8: identificação ────────────────────────────────────────────────── */
+
+.zf-note {
+  margin: -16px 0 0;
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+.zf-check {
+  position: relative;
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 12px;
+  align-items: start;
+  font-size: 15px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+.zf-check input {
+  position: absolute;
+  opacity: 0;
+  width: 26px;
+  height: 26px;
+  margin: 0;
+}
+.zf-check__box {
+  width: 26px;
+  height: 26px;
+  border: 1px solid color-mix(in srgb, var(--zf-primary) 45%, var(--zf-bg));
+  border-radius: 8px;
+  background: var(--surface);
+  transition: background-color 180ms, border-color 180ms;
+}
+.zf-check__box::after {
+  content: "";
+  display: block;
+  width: 7px;
+  height: 12px;
+  margin: 4px auto 0;
+  border: solid var(--zf-bg);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0);
+  transition: transform 200ms var(--ease);
+}
+.zf-check input:checked + .zf-check__box {
+  background: var(--zf-primary);
+  border-color: var(--zf-primary);
+}
+.zf-check input:checked + .zf-check__box::after {
+  transform: rotate(45deg) scale(1);
+}
+.zf-check input:focus-visible + .zf-check__box {
+  outline: 2px solid var(--zf-primary);
+  outline-offset: 3px;
+}
+.zf-legal {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+.zf-legal a {
+  color: inherit;
+  text-underline-offset: 2px;
+}
+
+/* ── Rodapé da etapa ───────────────────────────────────────────────────────── */
+
+.zf-actions {
+  margin-top: auto;
+  padding-top: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.zf .zf-skip {
+  min-height: 44px;
+  padding: 0 16px;
+  font-size: 14px;
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 4px;
+}
+.zf-sending {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.zf-error {
+  margin: 20px 0 0;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--zf-primary) 9%, var(--zf-bg));
+  color: var(--zf-primary);
+  font-size: 14.5px;
+}
+
+.zf-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ── Telas maiores: mesmo fluxo, mais respiro ──────────────────────────────── */
+
+@media (min-width: 640px) {
+  .zf-step {
+    padding-top: 64px;
+  }
+  .zf-actions {
+    margin-top: 40px;
+  }
+}
+
+@media (hover: hover) {
+  .zf .zf-option:hover:not(.is-on),
+  .zf .zf-nps__n:hover:not(.is-on),
+  .zf .zf-tag:hover:not(.is-on) {
+    border-color: var(--zf-primary);
+  }
+  .zf .zf-btn--light:hover {
+    background: #fff;
+  }
+  .zf .zf-btn--ghost:hover {
+    background: color-mix(in srgb, var(--zf-bg) 10%, transparent);
+  }
+  .zf .zf-btn--solid:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--zf-primary) 88%, #000);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zf *,
+  .zf *::before,
+  .zf *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}

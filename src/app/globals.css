@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+/* Identidade Zaff: os valores vêm de variáveis definidas no <html> (ver layout.tsx),
+   para que o painel possa ajustar as cores sem novo deploy. */
+@theme inline {
+  --color-brand: var(--zf-primary);
+  --color-cream: var(--zf-bg);
+  --color-leaf: var(--zf-accent);
+  --color-caramel: #b48e69;
+  --color-ink: #2b1b17;
+  --color-muted: #7a6a62;
+  --color-line: #e3ddd0;
+  --color-paper: #f7f5ef;
+
+  --font-display: var(--font-cormorant), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-jost), "Helvetica Neue", Arial, sans-serif;
+}
+
+:root {
+  --zf-primary: #882214;
+  --zf-bg: #ebe7dc;
+  --zf-accent: #58a112;
+  --font-display: var(--font-cormorant), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-jost), "Helvetica Neue", Arial, sans-serif;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--zf-bg);
+}
+
+body {
+  font-family: var(--font-sans);
+  color: #2b1b17;
+}
+
+/* ── Painel ────────────────────────────────────────────────────────────────── */
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-line bg-white p-6;
+  }
+  .card-title {
+    @apply font-display text-[22px] leading-tight text-ink;
+  }
+  .eyebrow {
+    @apply text-[11px] font-medium uppercase tracking-[0.14em] text-muted;
+  }
+  .btn {
+    @apply inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-full px-5 text-sm font-medium transition disabled:cursor-default disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply bg-brand text-cream hover:brightness-90;
+  }
+  .btn-outline {
+    @apply border border-line bg-white text-ink hover:border-brand hover:text-brand;
+  }
+  .btn-danger {
+    @apply border border-brand/30 bg-white text-brand hover:bg-brand hover:text-cream;
+  }
+  .input {
+    @apply h-10 w-full rounded-xl border border-line bg-white px-3 text-sm text-ink outline-none transition placeholder:text-muted/60 focus:border-brand focus:ring-2 focus:ring-brand/15;
+  }
+  textarea.input {
+    @apply h-auto py-2.5;
+  }
+  .label {
+    @apply mb-1.5 block text-[13px] font-medium text-ink;
+  }
+  .hint {
+    @apply mt-1.5 text-xs text-muted;
+  }
+  .badge {
+    @apply inline-flex shrink-0 items-center rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap;
+  }
+}

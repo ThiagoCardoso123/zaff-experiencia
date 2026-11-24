@@ -1,4 +1,4 @@
-import { createServerClient } from "@supabase/ssr";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
 /** Cliente com a sessão do usuário logado (respeita RLS). Use no painel. */
@@ -10,7 +10,7 @@ export async function createClient() {
     {
       cookies: {
         getAll: () => cookieStore.getAll(),
-        setAll: (list) => {
+        setAll: (list: { name: string; value: string; options: CookieOptions }[]) => {
           try {
             for (const { name, value, options } of list) cookieStore.set(name, value, options);
           } catch {
